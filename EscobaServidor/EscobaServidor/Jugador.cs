@@ -4,6 +4,8 @@ public class Jugador
 {
     private List<Carta> _cartasMano = new List<Carta>();
 
+    public List<Carta> cartasGanadasMano = new List<Carta>();
+
     public int _puntosJuego = 0;
 
     public string _nombre;
@@ -26,6 +28,11 @@ public class Jugador
     public void SacarCartaDeMano(Carta carta)
     {
         _cartasMano.Remove(carta);
+    }
+
+    public void AgregarCartaAGanadas(Carta carta)
+    {
+        cartasGanadasMano.Add(carta);
     }
     
     public bool TieneCartasEnMano()

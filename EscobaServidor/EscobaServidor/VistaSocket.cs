@@ -10,9 +10,9 @@ public class VistaSocket : Vista
     private StreamReader _reader;
     private StreamWriter _writer;
     
-    public VistaSocket()
+    public VistaSocket(int port)
     {
-        _listener = new TcpListener(IPAddress.Loopback, 8001);
+        _listener = new TcpListener(IPAddress.Loopback, port);
         _listener.Start();
         _client = _listener.AcceptTcpClient();
         _reader = new StreamReader(_client.GetStream());

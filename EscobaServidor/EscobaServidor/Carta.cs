@@ -23,6 +23,16 @@ public class Carta
     
     public bool EsOro() => _pinta == "Oro";
 
-    public override string ToString() => "[" + _valor + " de " + _pinta + "]";
+    public override string ToString()
+    {
+        string valorImprimible = _valor.ToString();
+        if (_valor == 8)
+            valorImprimible = "Sota";
+        if (_valor == 9)
+            valorImprimible = "Caballo";
+        if (_valor == 10)
+            valorImprimible = "Rey";
+        return "[" + valorImprimible + " de " + _pinta + "]";
+    }
     
 }

@@ -2,7 +2,8 @@
 using System.Net.Sockets;
 
 TcpClient client = new TcpClient ();
-client.Connect(IPAddress.Loopback, 8001);
+
+client.Connect (IPAddress.Loopback, 8001);
 
 NetworkStream ns = client.GetStream();
 StreamWriter writer = new StreamWriter(ns);

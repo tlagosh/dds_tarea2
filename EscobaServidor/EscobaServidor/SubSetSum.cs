@@ -4,17 +4,19 @@ public class SubSetSum
 {
   // dp[i][j] is going to store true if sum j is
   // possible with array elements from 0 to i.
-  static bool[, ] dp;
+  public bool[, ] dp;
+
+  public List<List<int>> result = new List<List<int>>();
  
-  static void display(List<int> v)
+  public void display(List<int> v)
   {
-    foreach(var i in v) Console.Write(i + " ");
-    Console.WriteLine();
+    List<int> vCopy = new List<int>(v);
+    result.Add(vCopy);
   }
  
   // A recursive function to print all subsets with the
   // help of dp[][]. Vector p[] stores current subset.
-  static void printSubsetsRec(int[] arr, int i, int sum, List<int> p)
+  public void printSubsetsRec(int[] arr, int i, int sum, List<int> p)
   {
     // If we reached end and sum is non-zero. We print
     // p[] only if arr[0] is equal to sum OR dp[0][sum]
@@ -51,7 +53,7 @@ public class SubSetSum
   }
  
   // Prints all subsets of arr[0..n-1] with sum 0.
-  static void printAllSubsets(int[] arr, int n, int sum)
+  public void printAllSubsets(int[] arr, int n, int sum)
   {
     if (n == 0 || sum < 0)
       return;
@@ -74,8 +76,6 @@ public class SubSetSum
            || dp[i - 1, j - arr[i]])
         : dp[i - 1, j];
     if (dp[n - 1, sum] == false) {
-      Console.WriteLine("There are no subsets with"
-                        + " sum " + sum);
       return;
     }
  
@@ -86,9 +86,10 @@ public class SubSetSum
   }
  
   // Driver Program to test above functions
-  public void GetSubSetSums(int[] arr, int n, int sum)
+  public List<List<int>> GetSubSetSums(int[] arr, int n, int sum)
   {
     printAllSubsets(arr, n, sum);
+    return this.result;
   }
 }
  

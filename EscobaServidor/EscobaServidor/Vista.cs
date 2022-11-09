@@ -12,6 +12,27 @@ public abstract class Vista
 
     public void Pausar() => LeerLinea();
 
+    public void MensajeBienvenida() => EscribirLinea("Bienvenido a Escoba!");
+
+    public void MensajeEsperandoJugador2() => EscribirLinea("Esperando jugador 2...");
+
+    public bool PedirModoDeJuego()
+    {
+        EscribirLinea("Ingrese 1 para jugar ONLINE, 2 para modo CONSOLA");
+        int modo = PedirNumeroValido(1, 2);
+        if (modo == 1)
+        {
+            EscribirLinea("Modo servidor seleccionado");
+            return true;
+        }
+        else if (modo == 2)
+        {
+            EscribirLinea("Modo consola seleccionado");
+            return false;
+        }
+        return false;
+    }
+
     public void MostrarMano(Jugador jugador)
     {
         Escribir("\nESTA ES TU MANO: ");
@@ -34,15 +55,31 @@ public abstract class Vista
         return idJugada;
     }
 
-    public void MostrarMensajeCartasGanadas(Jugador jugador, List<Carta> cartasGanadas, bool escoba)
+    public int PedirJugada(List<List<Carta>> jugadas)
+    {
+        EscribirLinea("Hay " + jugadas.Count + " jugadas en la mesa");
+        for (int i = 0; i < jugadas.Count; i++)
+        {
+            Escribir(i + ": ");
+            foreach (var carta in jugadas[i])
+                Escribir(carta.ToString());
+            EscribirLinea();
+        }
+        EscribirLinea("¿Cuál quieres usar?");
+        int idJugada = PedirNumeroValido(0, jugadas.Count - 1);
+        return idJugada;
+    }
+
+    public void InformarQueNoExisteCombinacion(Jugador jugador) => EscribirLinea("No se arma ninguna suma de 15");
+
+    public void MostrarMensajeCartasGanadas(Jugador jugador, List<Carta> cartasGanadas)
     {
         EscribirLinea("Jugador " + jugador.ToString() + " ganó las siguientes cartas:");
         foreach (var carta in cartasGanadas)
             EscribirLinea(carta.ToString());
-
-        if (escoba)
-            EscribirLinea("--------¡¡ESCOBA!!--------");
     }
+
+    public void InformarEscoba(Jugador jugador) => EscribirLinea("Escoba para " + jugador.ToString() + "! ---------------------------");
 
     public void MostrarMensajeFelicitandoGanador(Jugador ganador)
     {

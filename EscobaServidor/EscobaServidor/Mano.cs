@@ -7,22 +7,38 @@ public class Mano
 
     private Jugadores _jugadores;
     private int _idJugadorTurno;
+
+    private int _idUltimoJugadorQueTomoCarta;
     private CartasEnMesa _cartasEnMesa;
 
     private PilaCartas _pilaCartas = new PilaCartas();
 
-    private Vista _vista = new VistaConsola();
-    //private Vista _vista = new VistaSocket();
+    private Vista _vistaJugador1;
+    private Vista _vistaJugador2;
 
-    public Mano(Jugadores _jugadores)
+    public Mano(Jugadores _jugadores, Vista _vistaJugador1, Vista vistaJugador2, int _idJugadorTurno)
     {
         this._jugadores = _jugadores;
+        this._vistaJugador1 = _vistaJugador1;
+        this._vistaJugador2 = vistaJugador2;
+        this._idJugadorTurno = _idJugadorTurno;
         PonerMesaVacia();
         RepartirCartas();
         Poner4CartasEnMesa();
         DecidirQuienParte();
     }
 
+    private Vista GetVistaActual()
+    {
+        if (_idJugadorTurno == 0)
+        {
+            return _vistaJugador1;
+        }
+        else
+        {
+            return _vistaJugador2;
+        }
+    }
     private void PonerMesaVacia() => _cartasEnMesa = new CartasEnMesa();
     private void RepartirCartas() => _jugadores.RepartirCartas(CantidadInicialCartas, _pilaCartas);
     private void DecidirQuienParte() => _idJugadorTurno = GeneradorNumerosAleatorios.Generar(_jugadores.CantidadJugadores() - 1);
@@ -39,25 +55,25 @@ public class Mano
         while (!EsFinMano())
         {
             JugarTurno();
-            _vista.Pausar();
+            GetVistaActual().Pausar();
         }
     }
 
     private bool EsFinMano()
     {
-        bool noMasCartasEnPila = !_pilaCartas.TieneCartas();
+        bool noMasCartasEnAlgunaMano = !_jugadores.AlguienTieneCartasEnMano();
         bool alguienGano = _jugadores.ExisteJugadorCon16Puntos();
-        return noMasCartasEnPila || alguienGano;
+        return noMasCartasEnAlgunaMano || alguienGano;
     }
 
     private void JugarTurno()
     {
-        _vista.MostrarInfoJugador(_jugadores.ObtenerJugador(_idJugadorTurno));
-        _vista.MostrarMesa(_cartasEnMesa);
-        _vista.MostrarMano(_jugadores.ObtenerJugador(_idJugadorTurno));
-        int cartaParaBajar = _vista.PedirCarta(_jugadores.ObtenerJugador(_idJugadorTurno));
+        GetVistaActual().MostrarInfoJugador(_jugadores.ObtenerJugador(_idJugadorTurno));
+        GetVistaActual().MostrarMesa(_cartasEnMesa);
+        GetVistaActual().MostrarMano(_jugadores.ObtenerJugador(_idJugadorTurno));
+        int cartaParaBajar = GetVistaActual().PedirCarta(_jugadores.ObtenerJugador(_idJugadorTurno));
         BajarCarta(cartaParaBajar);
-        _vista.MostrarMesa(_cartasEnMesa);
+        GetVistaActual().MostrarMesa(_cartasEnMesa);
         AvanzarTurno();
     }
 
@@ -66,24 +82,41 @@ public class Mano
         Carta carta = _jugadores.ObtenerJugador(_idJugadorTurno).CartasMano[cartaParaBajar];
         _jugadores.ObtenerJugador(_idJugadorTurno).CartasMano.RemoveAt(cartaParaBajar);
 
-        (List<Carta> cartasGanadas, bool escoba) = _cartasEnMesa.ObtenerCartasGanadas(carta);
+        List<List<Carta>> jugadas = _cartasEnMesa.ObtenerTodasLasJugadas(carta);
 
-        if (cartasGanadas.Count > 0)
+        if (jugadas.Count == 0)
         {
-            foreach (Carta cartaGanada in cartasGanadas)
-            {
-                _jugadores.ObtenerJugador(_idJugadorTurno).AgregarCartaAMano(cartaGanada);
-            }
-            if (escoba)
-                _jugadores.ObtenerJugador(_idJugadorTurno)._puntosJuego += 1;
-            _vista.MostrarMensajeCartasGanadas(_jugadores.ObtenerJugador(_idJugadorTurno), cartasGanadas, escoba);
-            return true;
-
+            GetVistaActual().InformarQueNoExisteCombinacion(_jugadores.ObtenerJugador(_idJugadorTurno));
+            _cartasEnMesa.Agregar(carta);
+            return false;
         }
         else
         {
-            _cartasEnMesa.Agregar(carta);
-            return false;
+            int numeroDeJugada = GetVistaActual().PedirJugada(jugadas);
+            foreach (Carta cartaGanada in jugadas[numeroDeJugada])
+                _jugadores.ObtenerJugador(_idJugadorTurno).AgregarCartaAGanadas(cartaGanada);
+
+            //Sacar las cartas de la mesa
+            foreach (Carta cartaMesa in jugadas[numeroDeJugada])
+                _cartasEnMesa.Sacar(cartaMesa);
+            
+            //Si la mesa queda vacía, es escoba
+            if (_cartasEnMesa.CantidadCartas() == 0)
+            {
+                GetVistaActual().InformarEscoba(_jugadores.ObtenerJugador(_idJugadorTurno));
+                _jugadores.ObtenerJugador(_idJugadorTurno)._puntosJuego += 1;
+                _idUltimoJugadorQueTomoCarta = _idJugadorTurno;
+                Poner4CartasEnMesa();
+
+                return true;
+            }
+            else
+            {
+                GetVistaActual().MostrarMensajeCartasGanadas(_jugadores.ObtenerJugador(_idJugadorTurno), jugadas[numeroDeJugada]);
+                _idUltimoJugadorQueTomoCarta = _idJugadorTurno;
+
+                return false;
+            }
         }
     }
 

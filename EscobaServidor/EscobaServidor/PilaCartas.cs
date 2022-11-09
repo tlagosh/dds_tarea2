@@ -13,7 +13,7 @@ public class PilaCartas
     {
         _cartas = new List<Carta>();
         string[] pintas = { "Oro", "Basto", "Espada", "Copa" };
-        for(int i = 1; i < 8; i++)
+        for(int i = 1; i < 11; i++)
             foreach (string pinta in pintas)
                 _cartas.Add(new Carta(i, pinta));
     }
