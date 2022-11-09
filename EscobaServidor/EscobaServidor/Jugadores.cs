@@ -22,6 +22,21 @@ public class Jugadores
         foreach (var jugador in _jugadores)
             pilaCartas.DarCartas(jugador, cantidadInicialCartas);
     }
+
+    public int GetIdJugadorConMasPuntos()
+    {
+        int idJugadorConMasPuntos = 0;
+        int puntosJugadorConMasPuntos = 0;
+        for (int i = 0; i < _jugadores.Count(); i++)
+        {
+            if (_jugadores[i]._puntosJuego > puntosJugadorConMasPuntos)
+            {
+                puntosJugadorConMasPuntos = _jugadores[i]._puntosJuego;
+                idJugadorConMasPuntos = i;
+            }
+        }
+        return idJugadorConMasPuntos;
+    }
     
     public bool AlguienTieneCartasEnMano() => _jugadores.Any(j => j.TieneCartasEnMano());
 

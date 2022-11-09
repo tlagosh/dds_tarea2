@@ -91,9 +91,9 @@ public abstract class Vista
 
     public void InformarEscoba(Jugador jugador) => EscribirLinea("Escoba para " + jugador.ToString() + "! ---------------------------");
 
-    public void MostrarMensajeFelicitandoGanador(Jugador ganador) => EscribirLinea("Felicidades " + ganador._name + "! Ganaste la partida con " + ganador._puntosJuego + " puntos");
+    public void MostrarMensajeFelicitandoGanador(Jugador ganador) => EscribirLinea("Felicidades " + ganador._nombre + "! Ganaste la partida con " + ganador._puntosJuego + " puntos");
 
-    public void MostrarMensajePerdedor(Jugador ganador, Jugador perdedor) => EscribirLinea("Perdiste " + perdedor._name + "! " + ganador._name + " ganó la partida con " + ganador._puntosJuego + " puntos");
+    public void MostrarMensajePerdedor(Jugador ganador, Jugador perdedor) => EscribirLinea("Perdiste " + perdedor._nombre + "! " + ganador._nombre + " ganó la partida con " + ganador._puntosJuego + " puntos");
 
     private string ConvertirListaAString(List<int> lista)
     {

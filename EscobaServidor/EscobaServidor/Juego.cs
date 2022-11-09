@@ -1,7 +1,10 @@
+using System.Net;
+using System.Net.Sockets;
 namespace EscobaServidor;
 
 public class Juego
 {
+    static public TcpListener _listener = new TcpListener(IPAddress.Any, 8001);
     private const int NumJugadores = 2;
     private const int CantidadInicialCartas = 3;
 
@@ -10,7 +13,7 @@ public class Juego
 
     private int _idGanador = 0;
     private CartasEnMesa _cartasEnMesa;
-    private Vista _vistaJugador1 = new VistaSocket(8001);
+    private Vista _vistaJugador1 = new VistaSocket(_listener);
     private Vista _vistaJugador2;
     //private Vista _vistaConsola = new VistaConsola();
     private bool _modoDeJuegoServidor = false;
@@ -45,7 +48,7 @@ public class Juego
         if (_modoDeJuegoServidor)
         {
             GetVistaActual().MensajeEsperandoJugador2();
-            _vistaJugador2 = new VistaSocket(8002);
+            _vistaJugador2 = new VistaSocket(_listener);
             _vistaJugador2.MensajeBienvenida();
         }
         else {

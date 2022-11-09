@@ -5,14 +5,14 @@ namespace EscobaServidor;
 
 public class VistaSocket : Vista
 {
-    private TcpListener _listener;
+    TcpListener _listener;
     private TcpClient _client;
     private StreamReader _reader;
     private StreamWriter _writer;
     
-    public VistaSocket(int port)
+    public VistaSocket(TcpListener listener)
     {
-        _listener = new TcpListener(IPAddress.Loopback, port);
+        _listener = listener;
         _listener.Start();
         _client = _listener.AcceptTcpClient();
         _reader = new StreamReader(_client.GetStream());
