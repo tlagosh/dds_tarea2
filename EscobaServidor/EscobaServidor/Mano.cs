@@ -55,19 +55,32 @@ public class Mano
         while (!EsFinMano())
         {
             JugarTurno();
-            GetVistaActual().Pausar();
         }
+        foreach (Carta cartaEnMesa in _cartasEnMesa.Cartas)
+        {
+            _jugadores.ObtenerJugador(_idUltimoJugadorQueTomoCarta).AgregarCartaAGanadas(cartaEnMesa);
+        }
+        ContarPuntos();
+    }
+
+    private void ContarPuntos()
+    {
+        _jugadores.ContarPuntos();
     }
 
     private bool EsFinMano()
     {
-        bool noMasCartasEnAlgunaMano = !_jugadores.AlguienTieneCartasEnMano();
-        bool alguienGano = _jugadores.ExisteJugadorCon16Puntos();
-        return noMasCartasEnAlgunaMano || alguienGano;
+        bool hayCartasEnPila = _pilaCartas.TieneCartas();
+        bool AlguienTieneCartasEnMano = _jugadores.AlguienTieneCartasEnMano();
+        return !_pilaCartas.TieneCartas() && !_jugadores.AlguienTieneCartasEnMano();
     }
 
     private void JugarTurno()
-    {
+    {   
+        if(!_jugadores.ObtenerJugador(_idJugadorTurno).TieneCartasEnMano())
+        {
+            _pilaCartas.DarCartas(_jugadores.ObtenerJugador(_idJugadorTurno), CantidadInicialCartas);
+        }
         GetVistaActual().MostrarInfoJugador(_jugadores.ObtenerJugador(_idJugadorTurno));
         GetVistaActual().MostrarMesa(_cartasEnMesa);
         GetVistaActual().MostrarMano(_jugadores.ObtenerJugador(_idJugadorTurno));

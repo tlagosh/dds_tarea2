@@ -3,6 +3,8 @@ namespace EscobaServidor;
 public class CartasEnMesa
 {
     private List<Carta> _cartasEnMesa = new List<Carta>();
+
+    public List<Carta> Cartas => _cartasEnMesa;
     
     
     public override string ToString()

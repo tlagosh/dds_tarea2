@@ -34,6 +34,20 @@ public class Jugador
     {
         cartasGanadasMano.Add(carta);
     }
+
+    public int PuntosTotalesMano() 
+    {
+        int puntosMano = 0;
+        if (TieneSieteDeOro())
+            puntosMano += 1;
+        if (Oros() >= 3)
+            puntosMano += 1;
+        if (Sietes() >= 3)
+            puntosMano += 1;
+        if (ContarCartasGanadasMano() > 20)
+            puntosMano += 1;
+        return puntosMano;
+    }
     
     public bool TieneCartasEnMano()
     {
@@ -42,27 +56,26 @@ public class Jugador
 
     public int CartasEnMano()
     {
-        return _cartasMano.Count;
+        return _cartasMano.Count();
     }
 
+    public int ContarCartasGanadasMano()
+    {
+        return cartasGanadasMano.Count();
+    }
     public int Oros()
     {
-        return _cartasMano.Count(carta => carta.EsOro());
+        return cartasGanadasMano.Count(carta => carta.EsOro());
     }
 
     public int Sietes()
     {
-        return _cartasMano.Count(carta => carta.EsSiete());
+        return cartasGanadasMano.Count(carta => carta.EsSiete());
     }
 
     public bool TieneSieteDeOro()
     {
-        return _cartasMano.Any(carta => carta.EsSiete() && carta.EsOro());
-    }
-
-    public bool TieneCarta(Carta carta)
-    {
-        return _cartasMano.Any(cartaEnMano => cartaEnMano.Equals(carta));
+        return cartasGanadasMano.Any(carta => carta.EsSiete() && carta.EsOro());
     }
 
     public override string ToString()

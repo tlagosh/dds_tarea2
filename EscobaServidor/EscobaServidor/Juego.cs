@@ -55,6 +55,8 @@ public class Juego
         while (!EsFinJuego())
         {
             JugarMano();
+            _vistaJugador1.MostrarPuntosFinMano(_jugadores);
+            _vistaJugador2.MostrarPuntosFinMano(_jugadores);
         }
         DefinirGanador();
         FelicitarGanador();
@@ -75,12 +77,14 @@ public class Juego
 
     private void DefinirGanador()
     {
-        //TODO: implementar
+        _idGanador = _jugadores.GetIdJugadorConMasPuntos();
     }
     
     private void FelicitarGanador()
     {
+        _idJugadorTurno = _idGanador;
         GetVistaActual().MostrarMensajeFelicitandoGanador(_jugadores.ObtenerJugador(_idGanador));
-        //TODO: implementar       
+        _idJugadorTurno = _idJugadorTurno == 0 ? 1 : 0;
+        GetVistaActual().MostrarMensajePerdedor(_jugadores.ObtenerJugador(_idGanador), _jugadores.ObtenerJugador(_idJugadorTurno));
     }
 }

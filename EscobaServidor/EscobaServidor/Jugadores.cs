@@ -15,7 +15,7 @@ public class Jugadores
 
     public Jugador ObtenerJugador(int idJugador) => _jugadores[idJugador];
 
-    public int CantidadJugadores() => _jugadores.Count;
+    public int CantidadJugadores() => _jugadores.Count();
     
     public void RepartirCartas(int cantidadInicialCartas, PilaCartas pilaCartas)
     {
@@ -26,5 +26,14 @@ public class Jugadores
     public bool AlguienTieneCartasEnMano() => _jugadores.Any(j => j.TieneCartasEnMano());
 
     public bool ExisteJugadorCon16Puntos() => _jugadores.Any(j => j._puntosJuego >= 16);
+
+    public void ContarPuntos()
+    {
+        foreach (var jugador in _jugadores)
+        {
+            jugador._puntosJuego += jugador.PuntosTotalesMano();
+            jugador.cartasGanadasMano.Clear();
+        }
+    }
 
 }
