@@ -13,13 +13,13 @@ public class Juego
 
     private int _idGanador = 0;
     private CartasEnMesa _cartasEnMesa;
-    private Vista _vistaJugador1 = new VistaSocket(_listener);
+    private Vista _vistaJugador1;
     private Vista _vistaJugador2;
-    //private Vista _vistaConsola = new VistaConsola();
+    private Vista _vistaConsola = new VistaConsola();
     private bool _modoDeJuegoServidor = false;
-    public Vista GetVistaActual() {
+    private Vista GetVistaActual() {
         if (!_modoDeJuegoServidor) {
-            return _vistaJugador1;
+            return _vistaConsola;
         } else {
             if (_idJugadorTurno == 0) {
                 return _vistaJugador1;
@@ -47,19 +47,26 @@ public class Juego
 
         if (_modoDeJuegoServidor)
         {
-            GetVistaActual().MensajeEsperandoJugador2();
+            _vistaConsola.MensajeEsperandoJugador1();
+            _vistaJugador1 = new VistaSocket(_listener);
+            _vistaJugador1.MensajeBienvenida();
+            _vistaConsola.MensajeEsperandoJugador2();
             _vistaJugador2 = new VistaSocket(_listener);
             _vistaJugador2.MensajeBienvenida();
-        }
-        else {
-            _vistaJugador2 = _vistaJugador1;
+            _vistaConsola.MensajeJugadoresConectados();
         }
 
         while (!EsFinJuego())
         {
             JugarMano();
-            _vistaJugador1.MostrarPuntosFinMano(_jugadores);
-            _vistaJugador2.MostrarPuntosFinMano(_jugadores);
+            if (_modoDeJuegoServidor)
+            {
+                _vistaJugador1.MostrarPuntosFinMano(_jugadores);
+                _vistaJugador2.MostrarPuntosFinMano(_jugadores);
+            }
+            else {
+                _vistaConsola.MostrarPuntosFinMano(_jugadores);
+            }
         }
         DefinirGanador();
         FelicitarGanador();
@@ -74,7 +81,7 @@ public class Juego
 
     private void JugarMano()
     {
-        Mano mano = new Mano(_jugadores, _vistaJugador1, _vistaJugador2, _idJugadorTurno);
+        Mano mano = new Mano(_jugadores, _vistaJugador1, _vistaJugador2, _vistaConsola, _modoDeJuegoServidor, _idJugadorTurno);
         mano.Jugar();
     }
 

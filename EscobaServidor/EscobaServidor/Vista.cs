@@ -16,6 +16,10 @@ public abstract class Vista
 
     public void MensajeEsperandoJugador2() => EscribirLinea("Esperando jugador 2...");
 
+    public void MensajeEsperandoJugador1() => EscribirLinea("Esperando jugador 1...");
+
+    public void MensajeJugadoresConectados() => EscribirLinea("Jugadores conectados. Comienza el juego!");
+
     public bool PedirModoDeJuego()
     {
         EscribirLinea("Ingrese 1 para jugar ONLINE, 2 para modo CONSOLA");

@@ -5,6 +5,8 @@ public class Mano
     private const int IdUsuario = 0;
     private const int CantidadInicialCartas = 3;
 
+    private bool _modoDeJuegoServidor;
+
     private Jugadores _jugadores;
     private int _idJugadorTurno;
 
@@ -16,11 +18,15 @@ public class Mano
     private Vista _vistaJugador1;
     private Vista _vistaJugador2;
 
-    public Mano(Jugadores _jugadores, Vista _vistaJugador1, Vista vistaJugador2, int _idJugadorTurno)
+    private Vista _vistaConsola;
+
+    public Mano(Jugadores _jugadores, Vista _vistaJugador1, Vista vistaJugador2, Vista vistaConsola, bool modoDeJuegoServidor, int _idJugadorTurno)
     {
         this._jugadores = _jugadores;
         this._vistaJugador1 = _vistaJugador1;
         this._vistaJugador2 = vistaJugador2;
+        this._vistaConsola = vistaConsola;
+        this._modoDeJuegoServidor = modoDeJuegoServidor;
         this._idJugadorTurno = _idJugadorTurno;
         PonerMesaVacia();
         RepartirCartas();
@@ -28,17 +34,18 @@ public class Mano
         DecidirQuienParte();
     }
 
-    private Vista GetVistaActual()
-    {
-        if (_idJugadorTurno == 0)
-        {
-            return _vistaJugador1;
-        }
-        else
-        {
-            return _vistaJugador2;
+    public Vista GetVistaActual() {
+        if (!_modoDeJuegoServidor) {
+            return _vistaConsola;
+        } else {
+            if (_idJugadorTurno == 0) {
+                return _vistaJugador1;
+            } else {
+                return _vistaJugador2;
+            }
         }
     }
+    
     private void PonerMesaVacia() => _cartasEnMesa = new CartasEnMesa();
     private void RepartirCartas() => _jugadores.RepartirCartas(CantidadInicialCartas, _pilaCartas);
     private void DecidirQuienParte() => _idJugadorTurno = GeneradorNumerosAleatorios.Generar(_jugadores.CantidadJugadores() - 1);
