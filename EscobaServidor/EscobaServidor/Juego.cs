@@ -4,7 +4,7 @@ namespace EscobaServidor;
 
 public class Juego
 {
-    static public TcpListener _listener = new TcpListener(IPAddress.Any, 8001);
+    static private TcpListener _listener = new TcpListener(IPAddress.Any, 8001);
     private const int NumJugadores = 2;
     private const int CantidadInicialCartas = 3;
 

@@ -41,4 +41,6 @@ public class PilaCartas
     }
 
     public bool TieneCartas() => _cartas.Any();
+
+    public int CantidadCartas() => _cartas.Count();
 }

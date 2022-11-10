@@ -51,7 +51,7 @@ public abstract class Vista
         EscribirLinea("PUNTOS:");
         for (int i = 0; i < jugadores.CantidadJugadores(); i++)
         {
-            EscribirLinea($"Jugador " + jugadores.ObtenerJugador(i)._nombre + ": " + jugadores.ObtenerJugador(i)._puntosJuego + " puntos");
+            EscribirLinea($"Jugador " + jugadores.ObtenerJugador(i).Nombre + ": " + jugadores.ObtenerJugador(i).PuntosJuego + " puntos");
         }
     }
 
@@ -95,9 +95,9 @@ public abstract class Vista
 
     public void InformarEscoba(Jugador jugador) => EscribirLinea("Escoba para " + jugador.ToString() + "! ---------------------------");
 
-    public void MostrarMensajeFelicitandoGanador(Jugador ganador) => EscribirLinea("Felicidades " + ganador._nombre + "! Ganaste la partida con " + ganador._puntosJuego + " puntos");
+    public void MostrarMensajeFelicitandoGanador(Jugador ganador) => EscribirLinea("Felicidades " + ganador.Nombre + "! Ganaste la partida con " + ganador.PuntosJuego + " puntos");
 
-    public void MostrarMensajePerdedor(Jugador ganador, Jugador perdedor) => EscribirLinea("Perdiste " + perdedor._nombre + "! " + ganador._nombre + " ganó la partida con " + ganador._puntosJuego + " puntos");
+    public void MostrarMensajePerdedor(Jugador ganador, Jugador perdedor) => EscribirLinea("Perdiste " + perdedor.Nombre + "! " + ganador.Nombre + " ganó la partida con " + ganador.PuntosJuego + " puntos");
 
     private string ConvertirListaAString(List<int> lista)
     {

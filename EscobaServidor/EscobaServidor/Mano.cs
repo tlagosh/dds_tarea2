@@ -31,10 +31,9 @@ public class Mano
         PonerMesaVacia();
         RepartirCartas();
         Poner4CartasEnMesa();
-        DecidirQuienParte();
     }
 
-    public Vista GetVistaActual() {
+    private Vista GetVistaActual() {
         if (!_modoDeJuegoServidor) {
             return _vistaConsola;
         } else {
@@ -48,12 +47,16 @@ public class Mano
     
     private void PonerMesaVacia() => _cartasEnMesa = new CartasEnMesa();
     private void RepartirCartas() => _jugadores.RepartirCartas(CantidadInicialCartas, _pilaCartas);
-    private void DecidirQuienParte() => _idJugadorTurno = GeneradorNumerosAleatorios.Generar(_jugadores.CantidadJugadores() - 1);
 
     private void Poner4CartasEnMesa()
     {
         for (int i = 0; i < 4; i++)
-            _cartasEnMesa.Agregar(_pilaCartas.SacarCartaAlAzar());
+        {
+            if (_pilaCartas.TieneCartas())
+            {
+                _cartasEnMesa.Agregar(_pilaCartas.SacarCartaAlAzar());
+            }
+        }
     }
     
         
@@ -86,7 +89,14 @@ public class Mano
     {   
         if(!_jugadores.ObtenerJugador(_idJugadorTurno).TieneCartasEnMano())
         {
-            _pilaCartas.DarCartas(_jugadores.ObtenerJugador(_idJugadorTurno), CantidadInicialCartas);
+            if (_pilaCartas.CantidadCartas() >= CantidadInicialCartas)
+            {
+                _pilaCartas.DarCartas(_jugadores.ObtenerJugador(_idJugadorTurno), CantidadInicialCartas);
+            }
+            else {
+                //stop function
+                return;
+            }
         }
         GetVistaActual().MostrarInfoJugador(_jugadores.ObtenerJugador(_idJugadorTurno));
         GetVistaActual().MostrarMesa(_cartasEnMesa);
@@ -124,7 +134,7 @@ public class Mano
             if (_cartasEnMesa.CantidadCartas() == 0)
             {
                 GetVistaActual().InformarEscoba(_jugadores.ObtenerJugador(_idJugadorTurno));
-                _jugadores.ObtenerJugador(_idJugadorTurno)._puntosJuego += 1;
+                _jugadores.ObtenerJugador(_idJugadorTurno).PuntosJuego += 1;
                 _idUltimoJugadorQueTomoCarta = _idJugadorTurno;
                 Poner4CartasEnMesa();
 

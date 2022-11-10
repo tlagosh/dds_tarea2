@@ -29,9 +29,9 @@ public class Jugadores
         int puntosJugadorConMasPuntos = 0;
         for (int i = 0; i < _jugadores.Count(); i++)
         {
-            if (_jugadores[i]._puntosJuego > puntosJugadorConMasPuntos)
+            if (_jugadores[i].PuntosJuego > puntosJugadorConMasPuntos)
             {
-                puntosJugadorConMasPuntos = _jugadores[i]._puntosJuego;
+                puntosJugadorConMasPuntos = _jugadores[i].PuntosJuego;
                 idJugadorConMasPuntos = i;
             }
         }
@@ -40,14 +40,14 @@ public class Jugadores
     
     public bool AlguienTieneCartasEnMano() => _jugadores.Any(j => j.TieneCartasEnMano());
 
-    public bool ExisteJugadorCon16Puntos() => _jugadores.Any(j => j._puntosJuego >= 16);
+    public bool ExisteJugadorCon16Puntos() => _jugadores.Any(j => j.PuntosJuego >= 16);
 
     public void ContarPuntos()
     {
         foreach (var jugador in _jugadores)
         {
-            jugador._puntosJuego += jugador.PuntosTotalesMano();
-            jugador.cartasGanadasMano.Clear();
+            jugador.PuntosJuego += jugador.PuntosTotalesMano();
+            jugador.CartasGanadasMano.Clear();
         }
     }
 

@@ -4,15 +4,31 @@ public class Jugador
 {
     private List<Carta> _cartasMano = new List<Carta>();
 
-    public List<Carta> cartasGanadasMano = new List<Carta>();
+    private List<Carta> _cartasGanadasMano = new List<Carta>();
 
-    public int _puntosJuego = 0;
+    private int _puntosJuego = 0;
 
-    public string _nombre;
+    private string _nombre;
 
     public List<Carta> CartasMano
     {
         get { return _cartasMano; }
+    }
+
+    public List<Carta> CartasGanadasMano
+    {
+        get { return _cartasGanadasMano; }
+    }
+
+    public int PuntosJuego
+    {
+        get { return _puntosJuego; }
+        set { _puntosJuego = value; }
+    }
+
+    public string Nombre
+    {
+        get { return _nombre; }
     }
 
     public Jugador(string nombre)
@@ -32,7 +48,7 @@ public class Jugador
 
     public void AgregarCartaAGanadas(Carta carta)
     {
-        cartasGanadasMano.Add(carta);
+        _cartasGanadasMano.Add(carta);
     }
 
     public int PuntosTotalesMano() 
@@ -61,21 +77,21 @@ public class Jugador
 
     public int ContarCartasGanadasMano()
     {
-        return cartasGanadasMano.Count();
+        return _cartasGanadasMano.Count();
     }
     public int Oros()
     {
-        return cartasGanadasMano.Count(carta => carta.EsOro());
+        return _cartasGanadasMano.Count(carta => carta.EsOro());
     }
 
     public int Sietes()
     {
-        return cartasGanadasMano.Count(carta => carta.EsSiete());
+        return _cartasGanadasMano.Count(carta => carta.EsSiete());
     }
 
     public bool TieneSieteDeOro()
     {
-        return cartasGanadasMano.Any(carta => carta.EsSiete() && carta.EsOro());
+        return _cartasGanadasMano.Any(carta => carta.EsSiete() && carta.EsOro());
     }
 
     public override string ToString()
